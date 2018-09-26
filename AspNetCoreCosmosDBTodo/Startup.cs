@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreCosmosDBTodo.Config;
+using AspNetCoreCosmosDBTodo.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using AspNetCoreCosmosDBTodo.Models;
 
 namespace AspNetCoreCosmosDBTodo
 {
@@ -31,6 +35,10 @@ namespace AspNetCoreCosmosDBTodo
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddOptions();
+
+            services.Configure<CosmosDBConf>(Configuration.GetSection(nameof(CosmosDBConf)));
+            services.AddScoped<IDocumentDBRepository<Item>, DocumentDBRepository<Item>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
